@@ -17,9 +17,8 @@ const Contact: NextPage = () => {
   const [newDevelopmentRequest, setNewDevelopmentRequest] =
     useState<boolean>(false);
   const [applicationName, setApplicationName] = useState<string>("");
-  const [preferredContactMethod, setPreferredContactMethod] = useState<
-    string | null
-  >(null);
+  const [preferredContactMethod, setPreferredContactMethod] =
+    useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [moreDetails, setMoreDetails] = useState<string>("");
@@ -85,14 +84,19 @@ const Contact: NextPage = () => {
     handleSendEmail();
     addToDb();
   };
+
   const params = {
     TableName: "requests",
-    // Define the attributes and values of the item to be added. Adding ' + "" ' converts a value to
-    // a string.
     Item: {
       // id: { N: id + "" },
       // title: { S: title + "" },
       name: { S: firstName + " " + lastName + "" },
+      preferredContact: { S: preferredContactMethod },
+      email: { S: email },
+      phone: { S: phoneNumber },
+      newDev: { S: newDevelopmentRequest + "" },
+      existingApp: { S: applicationName + "" },
+      details: { S: moreDetails },
       // body: { S: body + "" },
     },
   };
@@ -160,7 +164,7 @@ const Contact: NextPage = () => {
             <div className="mt-5 md:col-span-3 md:mt-0">
               <form onSubmit={handleContactSubmit} ref={form}>
                 <div className="shadow sm:overflow-hidden sm:rounded-md">
-                  <div className="space-y-6 bg-white opacity-75 px-4 py-5 sm:p-6">
+                  <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                     <div className="grid grid-cols-6 gap-6">
                       <h1 className="mx-auto col-span-6 text-gray-700 text-xl">
                         Feel free to contact me using this form
