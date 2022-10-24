@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Header from "./components/header/index";
 import emailjs from "@emailjs/browser";
 import Banner from "./components/banner";
+import { dynamoClient } from "../libs/ddbClient.js";
+import { PutItemCommand } from "@aws-sdk/client-dynamodb";
 
 const Contact: NextPage = () => {
   const form = useRef<HTMLFormElement | null>(null);
@@ -81,8 +83,27 @@ const Contact: NextPage = () => {
     checkError("lastName", lastName);
 
     handleSendEmail();
+    addToDb();
+  };
+  const params = {
+    TableName: "requests",
+    // Define the attributes and values of the item to be added. Adding ' + "" ' converts a value to
+    // a string.
+    Item: {
+      // id: { N: id + "" },
+      // title: { S: title + "" },
+      name: { S: firstName + " " + lastName + "" },
+      // body: { S: body + "" },
+    },
   };
 
+  const addToDb = async () => {
+    try {
+      await dynamoClient.send(new PutItemCommand(params));
+    } catch {
+      console.log("test");
+    }
+  };
   useEffect(() => {
     if (errors.length > 0) {
       setShowErrorBanner(true);
