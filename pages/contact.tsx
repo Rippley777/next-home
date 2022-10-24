@@ -34,7 +34,7 @@ const Contact: NextPage = () => {
     setExistingDevelopmentRequest(false);
     setNewDevelopmentRequest(false);
     setApplicationName("");
-    setPreferredContactMethod(null);
+    setPreferredContactMethod("");
     setEmail("");
     setPhoneNumber("");
     setMoreDetails("");
